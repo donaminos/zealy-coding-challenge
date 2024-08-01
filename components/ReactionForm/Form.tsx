@@ -40,7 +40,7 @@ export const Form = ({ onSubmit, position }: props) => {
 
   return (
     <div
-      className="fixed bg-white p-4 rounded-lg shadow-lg emoji-picker"
+      className="fixed bg-white p-4 rounded-lg shadow-lg emoji-picker w-80 "
       style={{ left: `${position.x}px`, top: `${position.y}px` }}
       onClick={(e) => e.stopPropagation()}
     >
@@ -81,9 +81,9 @@ export const Form = ({ onSubmit, position }: props) => {
           <label htmlFor="comment" className="block text-sm font-semibold mb-1">
             Comment (optional):
           </label>
-          <input
+          <textarea
             id="comment"
-            type="text"
+            rows={4}
             className="w-full border rounded px-2 py-1"
             placeholder="Add a comment..."
             value={commentText}
