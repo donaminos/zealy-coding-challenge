@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, KeyboardEvent } from "react";
 
 import { ReactionCursor } from "./ReactionCursor";
 import { PositionType, ReactionType } from "./types";
@@ -28,15 +28,23 @@ export const Reactor = () => {
   const onMouseLeave = () => {
     setIsCursorDisabled(false);
   };
-
-  const handleSubmit = (payload: ReactionType) => {
+  const closeReactionForm = () => {
     setFormPosition(null);
     setIsCursorDisabled(false);
-    setReactions((prevState) => [...prevState, payload]);
   };
 
+  const handleSubmit = (payload: ReactionType) => {
+    setReactions((prevState) => [...prevState, payload]);
+    closeReactionForm();
+  };
+
+  const handlKeyDown = (e: KeyboardEvent) => {
+    if (e.code === "Escape") {
+      closeReactionForm();
+    }
+  };
   return (
-    <>
+    <div tabIndex={0} onKeyDown={handlKeyDown}>
       {reactions.map((reaction) => (
         <Reaction
           key={reaction.id}
@@ -60,6 +68,6 @@ export const Reactor = () => {
         onClick={handleCursorClick}
         isDisabled={isCursorDisabled}
       />
-    </>
+    </div>
   );
 };
