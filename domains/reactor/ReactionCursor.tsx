@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MessageCircle } from "lucide-react";
 
-const BLUE_50 = "#eff6ff";
-const BLUE_400 = "#60a5fa";
+import { PositionType } from "./types";
+import { ReactionIcon } from "./ReactionIcon";
 
 type Props = {
-  isFilled?: boolean;
+  onClick: (position: PositionType) => void;
 };
 
-export const ReactionCursor = ({ isFilled }: Props) => {
+export const ReactionCursor = ({ onClick }: Props) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -25,18 +24,17 @@ export const ReactionCursor = ({ isFilled }: Props) => {
     };
   }, []);
 
-  const props = {
-    color: BLUE_400,
-    fill: isFilled ? BLUE_400 : BLUE_50,
-    size: 32,
+  const handleClick = () => {
+    onClick(position);
   };
 
   return (
     <div
       className="absolute -translate-2/4 z-50"
       style={{ top: position.y, left: position.x }}
+      onClick={handleClick}
     >
-      <MessageCircle {...props} />
+      <ReactionIcon />
     </div>
   );
 };
