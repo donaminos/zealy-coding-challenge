@@ -1,20 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 import { PositionType } from "./types";
 import { ReactionIcon } from "./ReactionIcon";
 
 type Props = {
   onClick: (position: PositionType) => void;
+  isDisabled?: boolean;
 };
 
-export const ReactionCursor = ({ onClick }: Props) => {
+export const ReactionCursor = ({ onClick, isDisabled }: Props) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
-      setPosition({ x: event.clientX, y: event.clientY });
+      const position = { x: event.clientX, y: event.clientY };
+      setPosition(position);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -25,12 +28,14 @@ export const ReactionCursor = ({ onClick }: Props) => {
   }, []);
 
   const handleClick = () => {
-    onClick(position);
+    if (!isDisabled) {
+      onClick(position);
+    }
   };
 
   return (
     <div
-      className="absolute -translate-2/4 z-50"
+      className={cn("absolute -translate-2/4", { hidden: isDisabled })}
       style={{ top: position.y, left: position.x }}
       onClick={handleClick}
     >
