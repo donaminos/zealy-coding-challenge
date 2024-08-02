@@ -11,7 +11,7 @@ const buildReaction = (position: PositionType) => {
     id: Math.random().toString(),
     createdAt: Date.now(),
     position,
-    comment: "",
+    comment: "Great comment goes here...",
     author: {
       name: "Amine S",
       pictureUrl: "https://avatars.githubusercontent.com/u/5103153?v=4&size=64",
