@@ -35,7 +35,7 @@ export const ReactionCursor = ({ onClick, isDisabled }: Props) => {
 
   return (
     <div
-      className={cn("absolute -translate-2/4", { hidden: isDisabled })}
+      className={cn("absolute -translate-2/4 z-10", { hidden: isDisabled })}
       style={{ top: position.y, left: position.x }}
       onClick={handleClick}
     >

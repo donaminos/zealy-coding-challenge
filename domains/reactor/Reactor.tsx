@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ReactionCursor } from "./ReactionCursor";
 import { PositionType, ReactionType } from "./types";
 import { Reaction } from "./Reaction";
+import { ReactionForm } from "./ReactionForm";
 
 const buildReaction = (position: PositionType) => {
   return {
@@ -39,7 +40,7 @@ export const Reactor = () => {
   return (
     <>
       {reactions.map((reaction) => (
-        <Reaction
+        <ReactionForm
           key={reaction.id}
           {...reaction}
           onMouseEnter={onMouseEnter}
