@@ -1,4 +1,5 @@
-import { SendHorizontal, SmilePlus } from "lucide-react";
+import { SendHorizontal } from "lucide-react";
+import { EmojiClickData } from "emoji-picker-react";
 import {
   HoverCard,
   HoverCardContent,
@@ -6,8 +7,10 @@ import {
 } from "@/components/ui/hover-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+
 import { ReactionType } from "./types";
 import { ReactionIcon } from "./ReactionIcon";
+import { EmojiPicker } from "./EmojiPicker";
 
 type Props = ReactionType & {
   onMouseEnter?: () => void;
@@ -15,8 +18,12 @@ type Props = ReactionType & {
 };
 
 const Form = ({ author }: { author: { name: string; pictureUrl: string } }) => {
+  const handleEmojiSelect = (data: EmojiClickData) => {
+    console.log({ data });
+  };
+
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex gap-2 items-center pointer-events-auto ">
       <div>
         <Avatar className="w-8 h-8">
           <AvatarImage src={author.pictureUrl} />
@@ -24,10 +31,7 @@ const Form = ({ author }: { author: { name: string; pictureUrl: string } }) => {
         </Avatar>
       </div>
       <div>
-        <span>
-          <SmilePlus aria-hidden="true" className="h-5 w-5" />
-          <span className="sr-only">Pick an emoji</span>
-        </span>
+        <EmojiPicker onClick={handleEmojiSelect} />
       </div>
       <div className="basis-2/3">
         <label htmlFor="comment" className="sr-only">
@@ -37,7 +41,7 @@ const Form = ({ author }: { author: { name: string; pictureUrl: string } }) => {
           id="comment"
           name="comment"
           type="comment"
-          placeholder="Enter your comment here"
+          placeholder="Enter your feedback"
           className="w-full block p-2 rounded-md text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 placeholder:text-xs"
         />
       </div>
@@ -63,7 +67,7 @@ export const ReactionForm = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <HoverCard openDelay={0} open>
+      <HoverCard openDelay={0}>
         <HoverCardTrigger>
           <ReactionIcon isFilled />
         </HoverCardTrigger>
