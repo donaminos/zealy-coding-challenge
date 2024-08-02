@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/hover-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import { PositionType, AuthorType, ReactionType } from "./types";
 import { ReactionIcon } from "./ReactionIcon";
@@ -44,6 +45,7 @@ type FormProps = {
 const Form = ({ position, author, onSubmit }: FormProps) => {
   const [comment, setComment] = useState("");
   const [emoji, setEmoji] = useState<EmojiClickData | null>(null);
+  const [isEmojiMissing, setIsEmojiMissing] = useState(false);
 
   const handleEmojiSelect = (selectedEmoji: EmojiClickData) => {
     setEmoji(selectedEmoji);
@@ -52,6 +54,7 @@ const Form = ({ position, author, onSubmit }: FormProps) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!emoji) {
+      setIsEmojiMissing(true);
       return;
     }
     const payload = buildReaction({ position, emoji, comment, author });
@@ -59,37 +62,36 @@ const Form = ({ position, author, onSubmit }: FormProps) => {
   };
 
   return (
-    <form
-      className="flex gap-2 items-center pointer-events-auto"
-      onSubmit={handleSubmit}
-    >
-      <div>
-        <Avatar className="w-8 h-8">
-          <AvatarImage src={author.pictureUrl} />
-          <AvatarFallback>{author.name}</AvatarFallback>
-        </Avatar>
-      </div>
-      <div>
-        <EmojiPicker onClick={handleEmojiSelect} />
-      </div>
-      <div className="basis-2/3">
-        <label htmlFor="comment" className="sr-only">
-          Comment
-        </label>
-        <input
-          id="comment"
-          name="comment"
-          type="comment"
-          placeholder="Enter your feedback"
-          className="w-full block p-2 rounded-md text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 placeholder:text-xs"
-          onChange={(e) => setComment(e.target.value)}
-          value={comment}
-        />
-      </div>
-      <div>
-        <Button variant="secondary" size="icon" type="submit">
-          <SendHorizontal className="h-4 w-4" />
-        </Button>
+    <form onSubmit={handleSubmit}>
+      <div className="flex gap-2 items-center justify-center pointer-events-auto">
+        <div>
+          <Avatar className="w-8 h-8">
+            <AvatarImage src={author.pictureUrl} />
+            <AvatarFallback>{author.name}</AvatarFallback>
+          </Avatar>
+        </div>
+        <div className={cn({ "text-red-400": isEmojiMissing })}>
+          <EmojiPicker onClick={handleEmojiSelect} />
+        </div>
+        <div className="basis-2/3">
+          <label htmlFor="comment" className="sr-only">
+            Comment
+          </label>
+          <input
+            id="comment"
+            name="comment"
+            type="comment"
+            placeholder="Enter your feedback"
+            className="w-full block p-2 rounded-md text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 placeholder:text-xs"
+            onChange={(e) => setComment(e.target.value)}
+            value={comment}
+          />
+        </div>
+        <div>
+          <Button variant="secondary" size="icon" type="submit">
+            <SendHorizontal className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </form>
   );
