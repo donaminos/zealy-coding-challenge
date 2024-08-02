@@ -11,14 +11,16 @@
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-hover-card": "^1.1.1",
+    "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
+    "emoji-picker-react": "^4.11.1",
     "lucide-react": "^0.419.0",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
-    "shadcn-ui": "^0.8.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7"
   },

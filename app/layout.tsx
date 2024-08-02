@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-
-import { ReactionForm } from "@/components/ReactionForm";
-
+import { Reactor } from "@/domains/reactor/Reactor";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,9 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`relative ${inter.className}`}>
+      <body className={`cursor-none ${inter.className}`}>
         {children}
-        <ReactionForm />
+        <Reactor />
       </body>
     </html>
   );
