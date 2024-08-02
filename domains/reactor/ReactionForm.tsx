@@ -1,3 +1,4 @@
+import React, { FormEvent, useState } from "react";
 import { SendHorizontal } from "lucide-react";
 import { EmojiClickData } from "emoji-picker-react";
 import {
@@ -8,22 +9,60 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
-import { ReactionType } from "./types";
+import { PositionType, AuthorType, ReactionType } from "./types";
 import { ReactionIcon } from "./ReactionIcon";
 import { EmojiPicker } from "./EmojiPicker";
 
-type Props = ReactionType & {
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
+type Args = {
+  position: PositionType;
+  author: AuthorType;
+  emoji: EmojiClickData;
+  comment?: string;
+};
+const buildReaction = ({
+  position,
+  comment,
+  author,
+  emoji,
+}: Args): ReactionType => {
+  return {
+    id: Math.random().toString(),
+    createdAt: Date.now(),
+    position,
+    comment,
+    author,
+    emoji,
+  };
 };
 
-const Form = ({ author }: { author: { name: string; pictureUrl: string } }) => {
-  const handleEmojiSelect = (data: EmojiClickData) => {
-    console.log({ data });
+type FormProps = {
+  position: PositionType;
+  author: AuthorType;
+  onSubmit: (payload: ReactionType) => void;
+};
+
+const Form = ({ position, author, onSubmit }: FormProps) => {
+  const [comment, setComment] = useState("");
+  const [emoji, setEmoji] = useState<EmojiClickData | null>(null);
+
+  const handleEmojiSelect = (selectedEmoji: EmojiClickData) => {
+    setEmoji(selectedEmoji);
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!emoji) {
+      return;
+    }
+    const payload = buildReaction({ position, emoji, comment, author });
+    onSubmit(payload);
   };
 
   return (
-    <div className="flex gap-2 items-center pointer-events-auto ">
+    <form
+      className="flex gap-2 items-center pointer-events-auto"
+      onSubmit={handleSubmit}
+    >
       <div>
         <Avatar className="w-8 h-8">
           <AvatarImage src={author.pictureUrl} />
@@ -43,15 +82,25 @@ const Form = ({ author }: { author: { name: string; pictureUrl: string } }) => {
           type="comment"
           placeholder="Enter your feedback"
           className="w-full block p-2 rounded-md text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-300 placeholder:text-xs"
+          onChange={(e) => setComment(e.target.value)}
+          value={comment}
         />
       </div>
       <div>
-        <Button variant="secondary" size="icon">
+        <Button variant="secondary" size="icon" type="submit">
           <SendHorizontal className="h-4 w-4" />
         </Button>
       </div>
-    </div>
+    </form>
   );
+};
+
+type Props = {
+  position: PositionType;
+  author: AuthorType;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  onSubmit: (payload: ReactionType) => void;
 };
 
 export const ReactionForm = ({
@@ -59,6 +108,7 @@ export const ReactionForm = ({
   position,
   onMouseLeave,
   onMouseEnter,
+  onSubmit,
 }: Props) => {
   return (
     <div
@@ -67,12 +117,12 @@ export const ReactionForm = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <HoverCard openDelay={0}>
+      <HoverCard openDelay={0} open>
         <HoverCardTrigger>
           <ReactionIcon isFilled />
         </HoverCardTrigger>
         <HoverCardContent className="w-full p-1" side="right">
-          <Form author={author} />
+          <Form onSubmit={onSubmit} author={author} position={position} />
         </HoverCardContent>
       </HoverCard>
     </div>
